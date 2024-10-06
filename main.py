@@ -5,6 +5,7 @@ import requests
 class qBittorrentClientManager:
     def __init__(self, ip=os.getenv("TR_IP"), port=os.getenv("TR_PORT"), 
                  username=os.getenv("TR_USERNAME"), password=os.getenv("TR_PASSWORD")):
+
         self.ip = ip
         self.port = port
         self.username = username
@@ -52,14 +53,14 @@ class qBittorrentClientManager:
             bool: True if all elements are present, False otherwise.
         """
 
-        # Extract torrent names from the Transmission list
-        transmission_names = [torrent.name for torrent in rpc_list]
+        # Extract torrent names from the qBitTorrent list
+        torrent_names = [torrent['name'] for torrent in rpc_list]
 
         # Extract torrent names from file_sweeper.main list by deleting root_dir
         cleaned_torrents = [path.replace(root_dir+'/', '') for path in my_list]
 
-        # Checks whether all the elements in cleaned_torrents are present in transmission_names
-        return all(torrent_name in transmission_names for torrent_name in cleaned_torrents)
+        # Checks whether all the elements in cleaned_torrents are present in torrent_names
+        return all(torrent_name in torrent_names for torrent_name in cleaned_torrents)
 
     def main(self, root_dir, extensions):
         """
@@ -74,15 +75,17 @@ class qBittorrentClientManager:
         """
 
         rpc_list = self.get_torrents_list()
+        
         my_list = file_sweeper.main(root_dir, extensions)
 
         final_list = []
 
         if self.check_torrents_existence(rpc_list, my_list, root_dir):
             for torrent in rpc_list:
-                torrent_name = torrent.name.replace(root_dir+'/', '')
+                torrent_name = torrent['name'].replace(root_dir+'/', '')
+                
                 if any(item.endswith(torrent_name) for item in my_list):
-                    final_list.append((torrent.id, torrent.name))
+                    final_list.append((torrent['hash'], torrent['name']))
 
         return final_list
 ##############################
@@ -107,7 +110,7 @@ if __name__ == "__main__":
     print(" --- debug ","-"*10,"\n")
     torrents = tr_manager.get_torrents_list()
     #print("full list:",torrents)
-    torrents_info = [(torrent.id, torrent.name) for torrent in torrents]
+    torrents_info = [(torrent['hash'], torrent['name']) for torrent in torrents]
     print("list of torrents via RPC :")
     print(torrents_info)
     print()
