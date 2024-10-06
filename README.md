@@ -24,10 +24,10 @@
 
 ---
 
-=========================================================================================================================================
+<h2>
 DISCLAIMER: The original author of romovarr is garnajee and you can find the original code here: https://github.com/garnajee/removarr
             This is just an modified fork to work with qBitTorrent instead of Transmission.
-=========================================================================================================================================
+</h2>
 
 This is a web application, created to help you manually delete files present in the (qBitTorrent `completed/`) downloads folder but not in the (Jellyfin) `medias/` folder. If you have separated folders it'll also works.
 
