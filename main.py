@@ -78,15 +78,20 @@ class qBittorrentClientManager:
         
         my_list = file_sweeper.main(root_dir, extensions)
 
+        print("Completed downloads: ",len(my_list))
+        # for item in my_list:
+        #     print(item)
+
         final_list = []
 
         if self.check_torrents_existence(rpc_list, my_list, root_dir):
             for torrent in rpc_list:
                 torrent_name = torrent['name'].replace(root_dir+'/', '')
-                
+                #print(torrent_name)
                 if any(item.endswith(torrent_name) for item in my_list):
                     final_list.append((torrent['hash'], torrent['name']))
 
+        print("Final list count: ",len(final_list))
         return final_list
 ##############################
 if __name__ == "__main__":
