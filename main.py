@@ -1,33 +1,44 @@
 import file_sweeper
-from transmission_rpc import Client
 import os
+import requests
 
-class TransmissionClientManager:
+class qBittorrentClientManager:
     def __init__(self, ip=os.getenv("TR_IP"), port=os.getenv("TR_PORT"), 
                  username=os.getenv("TR_USERNAME"), password=os.getenv("TR_PASSWORD")):
         self.ip = ip
         self.port = port
         self.username = username
         self.password = password
-        self.transmission_client = self.connect_to_transmission()
+        self.session = requests.Session()
+        self.login()
 
-    def connect_to_transmission(self):
-        """
-        Connects to the Transmission RPC server.
-        """
-        return Client(host=self.ip, port=self.port, username=self.username, password=self.password)
+    def login(self):
+        url = f"http://{self.ip}:{self.port}/api/v2/auth/login"
+        data = {
+            "username": self.username,
+            "password": self.password
+        }
+        response = self.session.post(url, data=data)
+        if response.text != "Ok.":
+            raise Exception("Failed to log in to qBittorrent")
 
-    def get_torrents_list(self):
-        """
-        Gets the list of torrents from the Transmission RPC server.
-        """
-        return self.transmission_client.get_torrents(arguments=["id", "name"])
+    def get_qb_torrents_list(self):
+        url = f"http://{self.ip}:{self.port}/api/v2/torrents/info"
+        response = self.session.get(url)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return []
 
-    def delete_torrent_and_data(self, torrent_id):
-        """
-        Deletes a torrent and its associated data from the Transmission RPC server.
-        """
-        self.transmission_client.remove_torrent(ids=torrent_id, delete_data=True)
+    def delete_torrent_and_data(self, torrent_ids):
+        # url = f"http://{self.ip}:{self.port}/api/v2/torrents/delete"
+        # data = {
+        #     "hashes": "|".join(torrent_ids),
+        #     "deleteFiles": True
+        # }
+        # response = self.session.post(url, data=data)
+        #return response.status_code == 200
+        return True
 
     @staticmethod
     def check_torrents_existence(rpc_list, my_list, root_dir):
@@ -78,7 +89,7 @@ class TransmissionClientManager:
 ##############################
 if __name__ == "__main__":
     ip = "localhost"
-    port = 9091
+    port = 8080
     username = "admin"
     password = "admin"
     root_dir = "./tests/data/complete" # for file_sweeper
@@ -92,10 +103,10 @@ if __name__ == "__main__":
     # $ set +a
     # python3 app.py
 
-    tr_manager = TransmissionClientManager()
+    tr_manager = qBittorrentClientManager()
 
     print(" --- debug ","-"*10,"\n")
-    torrents = tr_manager.get_torrents_list()
+    torrents = tr_manager.get_qb_torrents_list()
     #print("full list:",torrents)
     torrents_info = [(torrent.id, torrent.name) for torrent in torrents]
     print("list of torrents via RPC :")
@@ -111,4 +122,5 @@ if __name__ == "__main__":
     result = tr_manager.main(root_dir, extensions)
     print("final result:", result)
     print("-"*10)
+
 

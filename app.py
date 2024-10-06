@@ -1,6 +1,6 @@
 import os  
 from flask import Flask, jsonify, request, render_template
-from main import TransmissionClientManager  # import the class from main.py
+from main import qBittorrentClientManager  # import the class from main.py
 
 # create Flask app instance
 app = Flask(__name__)
@@ -10,8 +10,8 @@ medias_dir = "/data/medias"
 series_dir = "/data/series"
 extensions = [".mkv", ".avi", ".mp4", ".mov"]   # for list_files()
 
-# Initialize TransmissionClientManager
-tr_manager = TransmissionClientManager()
+# Initialize qBittorrentClientManager
+tr_manager = qBittorrentClientManager()
 
 num_volumes = 0
 # check if the directory medias_dir exists
