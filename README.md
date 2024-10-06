@@ -4,29 +4,34 @@
   <h2 align="center">Removarr</h2>
 </p>
 <p align="center">
-  <a href="https://github.com/garnajee/removarr/issues/new?template=bug_report.md"><img src="https://img.shields.io/badge/report-issue-red" alt="Report Issue"></a> 
-  <a href="https://github.com/garnajee/removarr/issues/new?template=feature_request.md">
+  <a href="https://github.com/titan-3217/removarr/issues/new?template=bug_report.md"><img src="https://img.shields.io/badge/report-issue-red" alt="Report Issue"></a> 
+  <a href="https://github.com/titan-3217/removarr/issues/new?template=feature_request.md">
   <img src="https://img.shields.io/badge/request-feature-fuchsia" alt="Request Feature"></a>
   <br/>
-  <a href="https://github.com/garnajee/removarr/stargazers">
-    <img src="https://img.shields.io/github/stars/garnajee/removarr?style=social" alt="GitHub stars">
+  <a href="https://github.com/titan-3217/removarr/stargazers">
+    <img src="https://img.shields.io/github/stars/titan-3217/removarr?style=social" alt="GitHub stars">
   </a>
-  <a href="https://github.com/garnajee/removarr/forks">
-    <img src="https://img.shields.io/github/forks/garnajee/removarr?style=social" alt="GitHub forks">
+  <a href="https://github.com/titan-3217/removarr/forks">
+    <img src="https://img.shields.io/github/forks/titan-3217/removarr?style=social" alt="GitHub forks">
   </a>
   <br/>
-  <img src="https://img.shields.io/github/contributors/garnajee/removarr?color=dark-green" alt="Contributors">
-  <img src="https://img.shields.io/github/issues/garnajee/removarr" alt="Issues">
-  <img src="https://img.shields.io/github/license/garnajee/removarr?color=blue" alt="License">
+  <img src="https://img.shields.io/github/contributors/titan-3217/removarr?color=dark-green" alt="Contributors">
+  <img src="https://img.shields.io/github/issues/titan-3217/removarr" alt="Issues">
+  <img src="https://img.shields.io/github/license/titan-3217/removarr?color=blue" alt="License">
   <br/>
-  <img src="https://github.com/garnajee/removarr/actions/workflows/publish-image.yml/badge.svg" alt="Deploy and build status">
+  <img src="https://github.com/titan-3217/removarr/actions/workflows/publish-image.yml/badge.svg" alt="Deploy and build status">
 </p>
 
 ---
 
-This is a web application, created to help you manually delete files present in the (Transmission `completed/`) downloads folder but not in the (Jellyfin) `medias/` folder. If you have separated folders it'll also works.
+=========================================================================================================================================
+DISCLAIMER: The original author of romovarr is garnajee and you can find the original code here: https://github.com/garnajee/removarr
+            This is just an modified fork to work with qBitTorrent instead of Transmission.
+=========================================================================================================================================
 
-Removarr is a web application designed to assist the \*arr apps like Radarr and Sonarr by helping you automatically identify and manually delete duplicate files from your Transmission download folder that are already present in your Jellyfin library. 
+This is a web application, created to help you manually delete files present in the (qBitTorrent `completed/`) downloads folder but not in the (Jellyfin) `medias/` folder. If you have separated folders it'll also works.
+
+Removarr is a web application designed to assist the \*arr apps like Radarr and Sonarr by helping you automatically identify and manually delete duplicate files from your qBitTorrent download folder that are already present in your Jellyfin library. 
 
 Take a look at the screenshot of the web-app:
 
@@ -52,12 +57,12 @@ So here comes Removarr. It will automatically identifies these duplicates, allow
 
 ## How it works
 
-A recursive comparison according to the inodes of the files is made between the `completed/` folder (on the Transmission side) and the folders where the media are stored (on the Jellyfin side).
+A recursive comparison according to the inodes of the files is made between the `completed/` folder (on the qBitTorrent side) and the folders where the media are stored (on the Jellyfin side).
 
 Example 1:
 
 ```
-├── completed       # Transmission side
+├── completed       # qBitTorrent side
 │   ├── folder1
 │   ├── ...
 │   ├── files
@@ -74,7 +79,7 @@ Example 1:
 Example 2:
 
 ```
-├── completed       # Transmission side
+├── completed       # qBitTorrent side
 │   ├── folder1
 │   ├── ...
 │   ├── files
@@ -90,7 +95,7 @@ Example 2:
         └── ...
 ```
 
-All the files present on the side of Jellyfin are the latest versions that we want to keep. So, all we want to remove is everything that is present on the Transmission side but not on the Jellyfin side.
+All the files present on the side of Jellyfin are the latest versions that we want to keep. So, all we want to remove is everything that is present on the qBitTorrent side but not on the Jellyfin side.
 
 If the deleted file was in a folder: 
 
@@ -139,7 +144,7 @@ Nothing more simple than to use the [docker-compose](docker-compose.yml) file.
 ```yaml
 services:
   removarr:
-    image: ghcr.io/garnajee/removarr:latest
+    image: ghcr.io/titan-3217/removarr:latest
     container_name: removarr
     restart: always
     environment:
@@ -161,7 +166,7 @@ services:
 ```yaml
 services:
   removarr:
-    image: ghcr.io/garnajee/removarr:latest
+    image: ghcr.io/titan-3217/removarr:latest
     container_name: removarr
     restart: always
     environment:
@@ -215,7 +220,7 @@ If you want to use a docker-compose.yml instead of the Dockerfile, then use this
 
 ```diff
   removarr:
--   image: ghcr.io/garnajee/removarr:latest
+-   image: ghcr.io/titan-3217/removarr:latest
     ...
   removarr:
 +   build: .
