@@ -22,7 +22,7 @@ class qBittorrentClientManager:
         if response.text != "Ok.":
             raise Exception("Failed to log in to qBittorrent")
 
-    def get_qb_torrents_list(self):
+    def get_torrents_list(self):
         url = f"http://{self.ip}:{self.port}/api/v2/torrents/info"
         response = self.session.get(url)
         if response.status_code == 200:
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     tr_manager = qBittorrentClientManager()
 
     print(" --- debug ","-"*10,"\n")
-    torrents = tr_manager.get_qb_torrents_list()
+    torrents = tr_manager.get_torrents_list()
     #print("full list:",torrents)
     torrents_info = [(torrent.id, torrent.name) for torrent in torrents]
     print("list of torrents via RPC :")
