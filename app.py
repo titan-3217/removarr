@@ -46,7 +46,7 @@ def list_files():
 # define route for deleting a file
 @app.route('/files/<int:id>', methods=['DELETE'])
 def delete_file(id):
-    tr_manager.delete_torrent_and_data(int(id))
+    #tr_manager.delete_torrent_and_data(int(id))
     return jsonify({'message': 'File deleted successfully'}), 200
 
 # define route for deleting selected files

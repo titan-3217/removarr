@@ -31,14 +31,13 @@ class qBittorrentClientManager:
             return []
 
     def delete_torrent_and_data(self, torrent_ids):
-        # url = f"http://{self.ip}:{self.port}/api/v2/torrents/delete"
-        # data = {
-        #     "hashes": "|".join(torrent_ids),
-        #     "deleteFiles": True
-        # }
-        # response = self.session.post(url, data=data)
-        #return response.status_code == 200
-        return True
+        url = f"http://{self.ip}:{self.port}/api/v2/torrents/delete"
+        data = {
+            "hashes": "|".join(torrent_ids),
+            "deleteFiles": True
+        }
+        response = self.session.post(url, data=data)
+        return response.status_code == 200
 
     @staticmethod
     def check_torrents_existence(rpc_list, my_list, root_dir):
